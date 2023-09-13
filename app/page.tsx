@@ -1,6 +1,8 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useState } from "react";
+import { Input } from "../components/Input";
 import StoryCard from "../components/story-card";
 import { storyProps } from "../models/story";
 
@@ -237,8 +239,7 @@ const stories: storyProps[] = [
 export default function Home() {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("name");
-
-  console.log(filterType);
+  const [searchVisibility, setSearchVisibility] = useState(false);
 
   const filteredStories = stories.filter((story) => {
     if (filterType === "gender") {
@@ -274,7 +275,7 @@ export default function Home() {
             <span className="font-bold">RPG</span>Note
           </h1>
 
-          <div className="flex flex-row">
+          {/* <div className="flex flex-row">
             <select
               className="bg-zinc-800 h-10 rounded-l-full px-4 border-l border-t border-b"
               name="filterType"
@@ -293,15 +294,99 @@ export default function Home() {
               value={search}
               onChange={({ target }) => setSearch(target.value)}
             />
-          </div>
+          </div> */}
 
-          <div className="w-[138.467px] flex flex-row items-center gap-4"></div>
+          <button
+            className="h-5 w-5 flex md:hidden"
+            onClick={() => setSearchVisibility(!searchVisibility)}
+          >
+            <Search className="h-full w-full" />
+          </button>
+
+          <Input.Root className="hidden md:flex">
+            <Input.Select
+              onChange={({ target }) => setFilterType(target.value)}
+              className="pl-4"
+              list={[
+                {
+                  title: "Nome",
+                  value: "name",
+                },
+                {
+                  title: "Gênero",
+                  value: "gender",
+                },
+                {
+                  title: "Narrador",
+                  value: "storyteller",
+                },
+              ]}
+            />
+            <div className="h-[70%] w-px mx-1 border border-zinc-400" />
+            <Input.Field
+              value={search}
+              onChange={({ target }) => setSearch(target.value)}
+              placeholder="Escreva aqui o que você busca"
+            />
+          </Input.Root>
+
+          <div className="hidden md:w-[138.467px] md:flex md:flex-row md:items-center md:gap-4"></div>
         </div>
-        <div className="w-[98%] border border-zinc-700" />
+        <div
+          className="w-[80%] md:w-[98%] h-fit group"
+          data-SearchVisibility={searchVisibility}
+        >
+          <div className="w-full border border-zinc-700" />
+          <div className="w-full h-fit bg-zinc-950 hidden group-data-[SearchVisibility=true]:flex flex-col py-4 gap-4">
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-zinc-400">Tipo de busca:</span>
+              <div
+                className="bg-zinc-950 w-full  overflow-clip flex flex-row justify-center items-center rounded-lg border border-zinc-400 group"
+                data-FilterType={filterType}
+              >
+                <button
+                  className="w-full h-full py-1 bg-zinc-950 opacity-70 group-data-[FilterType=name]:bg-zinc-800 group-data-[FilterType=name]:opacity-100"
+                  onClick={() => setFilterType("name")}
+                >
+                  Nome
+                </button>
+                <div className="h-8 w-px border border-zinc-400" />
+                <button
+                  className="w-full h-full py-1 bg-zinc-950 opacity-70 group-data-[FilterType=gender]:bg-zinc-800 group-data-[FilterType=gender]:opacity-100"
+                  onClick={() => setFilterType("gender")}
+                >
+                  Gênero
+                </button>
+                <div className="h-8 w-px border border-zinc-400" />
+                <button
+                  className="px-2 w-full h-full py-1 bg-zinc-950 opacity-70 group-data-[FilterType=storyteller]:bg-zinc-800 group-data-[FilterType=storyteller]:opacity-100"
+                  onClick={() => setFilterType("storyteller")}
+                >
+                  Narrador
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-zinc-400">
+                Escreva aqui o que você busca:
+              </span>
+              <Input.Root className="h-8 w-full pl-2">
+                <Search className="h-5 w-5" />
+                <Input.Field
+                  className="pl-2"
+                  value={search}
+                  onChange={({ target }) => setSearch(target.value)}
+                />
+              </Input.Root>
+            </div>
+          </div>
+          <div className="w-full md:w-[98%] border border-zinc-700 group-data-[SearchVisibility=false]:hidden" />
+        </div>
       </header>
-      <div className="flex-1 flex flex-row items-center justify-center flex-wrap p-8">
+      <div className="w-full flex-1 flex flex-row items-center justify-center flex-wrap p-8">
         {filteredStories.length !== 0 ? (
-          <ul className="w-[50%] flex flex-row gap-4 flex-wrap items-center justify-center">
+          <ul className="w-full md:w-[50%] flex flex-row gap-4 flex-wrap items-center justify-center">
             {filteredStories.map((story) => (
               <StoryCard key={story.title} {...story} />
             ))}
