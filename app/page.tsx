@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../components/Input";
 import StoryCard from "../components/story-card";
@@ -300,7 +300,11 @@ export default function Home() {
             className="h-5 w-5 flex md:hidden"
             onClick={() => setSearchVisibility(!searchVisibility)}
           >
-            <Search className="h-full w-full" />
+            {!searchVisibility ? (
+              <Search className="h-full w-full" />
+            ) : (
+              <X className="h-full w-full" />
+            )}
           </button>
 
           <Input.Root className="hidden md:flex">
